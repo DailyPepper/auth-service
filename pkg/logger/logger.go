@@ -29,7 +29,7 @@ func New(level string) *Logger {
 	case "error":
 		l = zerolog.ErrorLevel
 	case "warn":
-		l = zerolog.ErrorLevel
+		l = zerolog.WarnLevel
 	case "info":
 		l = zerolog.InfoLevel
 	case "debug":
