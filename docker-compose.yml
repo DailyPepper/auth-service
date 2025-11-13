@@ -1,31 +1,40 @@
-version: '3.8'
 services:
   auth-service:
-    build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "50051:50051"
+      - "${GRPC_PORT}:${GRPC_PORT}"
     environment:
-      - DATABASE_URL=postgres://user:pass@postgres:5432/auth_db
-      - REDIS_URL=redis:6379
+      - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=${DB_SSLMODE}
+      - GRPC_ADDR=${GRPC_ADDR}
+    env_file:
+      - .env
     depends_on:
       - postgres
       - redis
+    restart: unless-stopped
 
   postgres:
     image: postgres:15-alpine
     environment:
-      - POSTGRES_DB=auth_db
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "${DB_PORT}:${DB_PORT}"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - .env
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+    restart: unless-stopped
 
 volumes:
   postgres_data:
