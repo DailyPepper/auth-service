@@ -1,11 +1,11 @@
 package repository
 
 import (
-	"auth-service/internal/models"
 	"context"
 	"database/sql"
 	"time"
 
+	"github.com/DailyPepper/auth-service/internal/models"
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
 )

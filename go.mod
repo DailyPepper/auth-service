@@ -1,4 +1,4 @@
-module auth-service
+module github.com/DailyPepper/auth-service
 
 go 1.24.4
 

@@ -1,8 +1,9 @@
 package service
 
 import (
-	"auth-service/internal/models"
 	"context"
+
+	"github.com/DailyPepper/auth-service/internal/models"
 )
 
 type Registr interface {

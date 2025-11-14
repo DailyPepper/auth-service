@@ -1,11 +1,11 @@
 package server
 
 import (
-	"auth-service/internal/models"
-	"auth-service/pkg/generated/auth"
 	"context"
 	"log"
 
+	"github.com/DailyPepper/auth-service/internal/models"
+	"github.com/DailyPepper/auth-service/pkg/generated/auth"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

@@ -1,12 +1,12 @@
 package server
 
 import (
-	"auth-service/internal/service"
-	"auth-service/pkg/generated/auth"
 	"fmt"
 	"log"
 	"net"
 
+	"github.com/DailyPepper/auth-service/internal/service"
+	"github.com/DailyPepper/auth-service/pkg/generated/auth"
 	"google.golang.org/grpc"
 )
 

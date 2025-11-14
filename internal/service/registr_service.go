@@ -1,10 +1,11 @@
 package service
 
 import (
-	"auth-service/internal/models"
-	"auth-service/internal/repository"
 	"context"
 	"time"
+
+	"github.com/DailyPepper/auth-service/internal/models"
+	"github.com/DailyPepper/auth-service/internal/repository"
 
 	"github.com/pkg/errors"
 )

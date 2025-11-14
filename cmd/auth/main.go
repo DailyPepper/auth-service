@@ -1,15 +1,16 @@
 package main
 
 import (
-	"auth-service/config"
-	"auth-service/internal/repository"
-	"auth-service/internal/server"
-	"auth-service/internal/service"
-	"auth-service/pkg/logger"
-	"auth-service/pkg/migrations"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/DailyPepper/auth-service/config"
+	"github.com/DailyPepper/auth-service/internal/repository"
+	"github.com/DailyPepper/auth-service/internal/server"
+	"github.com/DailyPepper/auth-service/internal/service"
+	"github.com/DailyPepper/auth-service/pkg/logger"
+	"github.com/DailyPepper/auth-service/pkg/migrations"
 )
 
 func main() {
