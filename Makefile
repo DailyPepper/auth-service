@@ -38,17 +38,21 @@ test:
 # PROTOBUF
 # =============================================================================
 
-# Проверка зависимостей
-check-deps:
-	@echo "🔍 Checking dependencies..."
+# Проверка зависимостей для protobuf (без goose)
+check-proto-deps:
+	@echo "🔍 Checking protobuf dependencies..."
 	@which protoc > /dev/null || (echo "❌ Error: protoc not installed. Run: make install-deps" && false)
 	@test -f "$(GOBIN)/protoc-gen-go" || (echo "❌ Error: protoc-gen-go not installed. Run: make install-deps" && false)
 	@test -f "$(GOBIN)/protoc-gen-go-grpc" || (echo "❌ Error: protoc-gen-go-grpc not installed. Run: make install-deps" && false)
-	@which goose > /dev/null || (echo "⚠️  Warning: goose not installed. Run: go install github.com/pressly/goose/v3/cmd/goose@latest" && false)
-	@echo "✅ All dependencies found!"
+	@echo "✅ All protobuf dependencies found!"
 
-# Генерация protobuf кода
-proto: check-deps
+# Проверка всех зависимостей (включая goose)
+check-deps: check-proto-deps
+	@which goose > /dev/null || (echo "⚠️  Warning: goose not installed. Run: go install github.com/pressly/goose/v3/cmd/goose@latest" && true)
+	@echo "✅ All dependencies checked!"
+
+# Генерация protobuf кода (требует только protobuf зависимости)
+proto: check-proto-deps
 	@echo "📝 Generating protobuf code..."
 	@echo "📄 Proto file: $(FULL_PROTO_PATH)"
 	@echo "📁 Output dir: $(GENERATED_DIR)"
@@ -112,28 +116,32 @@ docker-down:
 docker-logs:
 	docker-compose logs -f postgres
 
-# Создание новой миграции
-migrate-create:
+# Создание новой миграции (требует goose)
+migrate-create: check-goose
 	@read -p "📝 Enter migration name: " name; \
-	goose -dir migrations create $${name} sql
+	$(GOBIN)/goose -dir migrations create $${name} sql
 	@echo "✅ Migration created in migrations/ directory"
 
-# Применить миграции
-migrate-up:
+# Применить миграции (требует goose)
+migrate-up: check-goose
 	@echo "🔄 Applying database migrations..."
-	goose -dir migrations postgres "$(DB_URL)" up
+	$(GOBIN)/goose -dir migrations postgres "$(DB_URL)" up
 	@echo "✅ Migrations applied successfully"
 
-# Откатить последнюю миграцию
-migrate-down:
+# Откатить последнюю миграцию (требует goose)
+migrate-down: check-goose
 	@echo "↩️  Rolling back last migration..."
-	goose -dir migrations postgres "$(DB_URL)" down
+	$(GOBIN)/goose -dir migrations postgres "$(DB_URL)" down
 	@echo "✅ Migration rolled back"
 
-# Показать статус миграций
-migrate-status:
+# Показать статус миграций (требует goose)
+migrate-status: check-goose
 	@echo "📊 Migration status:"
-	goose -dir migrations postgres "$(DB_URL)" status
+	$(GOBIN)/goose -dir migrations postgres "$(DB_URL)" status
+
+# Проверка наличия goose
+check-goose:
+	@which goose > /dev/null || (echo "❌ Error: goose not installed. Run: make install-deps" && false)
 
 # =============================================================================
 # BUILD & DEPLOY

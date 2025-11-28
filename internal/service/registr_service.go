@@ -103,14 +103,6 @@ func (s *RegistrService) Login(ctx context.Context, req *models.LoginRequest) (*
 	}, nil
 }
 
-func (s *RegistrService) generateTokens(user *models.User) (string, string, error) {
-	// TODO: Реализовать генерацию JWT токенов
-	// Временная заглушка
-	accessToken := "access_token_" + user.Email
-	refreshToken := "refresh_token_" + user.Email
-	return accessToken, refreshToken, nil
-}
-
 func (s *RegistrService) GetUserProfile(ctx context.Context, userID int64) (*models.User, error) {
 	user, err := s.userRepo.GetUserByID(ctx, userID)
 	if err != nil {
@@ -124,4 +116,33 @@ func (s *RegistrService) GetUserProfile(ctx context.Context, userID int64) (*mod
 	user.Password = ""
 
 	return user, nil
+}
+
+func (s *RegistrService) ValidateToken(ctx context.Context, token string) (*models.User, error) {
+	// TODO: Реализовать полноценную валидацию JWT токена
+
+	if token == "" {
+		return nil, errors.New("empty token")
+	}
+
+	if len(token) < 10 {
+		return nil, errors.New("invalid token format")
+	}
+
+	// Нужно парсить JWT и проверять подпись
+	return &models.User{
+		ID:        1,
+		Email:     "test@example.com",
+		FirstName: "Test",
+		Surname:   "User",
+		IsActive:  true,
+		Role:      models.RoleUser,
+	}, nil
+}
+
+func (s *RegistrService) generateTokens(user *models.User) (string, string, error) {
+	// TODO: Реализовать генерацию JWT токенов
+	accessToken := "access_token_" + user.Email
+	refreshToken := "refresh_token_" + user.Email
+	return accessToken, refreshToken, nil
 }

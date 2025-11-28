@@ -7,7 +7,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-// unaryInterceptor - интерцептор для логирования вызовов
 func (s *GRPCServer) unaryInterceptor() grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		log.Printf("📨 gRPC method called: %s", info.FullMethod)
